@@ -12,6 +12,6 @@ import com.vito.framework.com.vito.framework.bootstrap;
 public class DefaultBootStrap implements bootstrap {
     @Override
     public void init() {
-        //To change body of implemented methods use File | Settings | File Templates.
+
     }
 }
