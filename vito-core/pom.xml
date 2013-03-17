@@ -3,15 +3,38 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>vito-parent</artifactId>
-        <groupId>ViTO</groupId>
+        <artifactId>vito</artifactId>
+        <groupId>org.vito</groupId>
         <version>0.1-SNAPSHOT</version>
-        <relativePath>../vito-parent/pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>ViTO</groupId>
-    <artifactId>vito-core</artifactId>
 
+    <artifactId>vito-core</artifactId>
+    <packaging>jar</packaging>
+    <name>Vito :: Core</name>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>com.google.inject</groupId>
+            <artifactId>guice</artifactId>
+            <version>3.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>r09</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.typesafe.akka</groupId>
+            <artifactId>akka-actor_2.10</artifactId>
+            <version>2.1.1</version>
+        </dependency>
+
+
+    </dependencies>
 
 </project>
