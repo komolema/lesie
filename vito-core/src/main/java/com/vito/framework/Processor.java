@@ -1,12 +1,12 @@
-package com.vito.framework.com.vito.framework;
+package com.vito.framework;
 
 /**
  * Created with IntelliJ IDEA.
  * User: karabom
  * Date: 3/17/13
- * Time: 2:27 PM
+ * Time: 2:14 PM
  * To change this template use File | Settings | File Templates.
  */
-public interface Loader<T> {
-    public void load(T ... options);
+public interface Processor<T> {
+    public void handleRequest(T request);
 }

@@ -1,4 +1,4 @@
-package com.vito.framework.com.vito.framework;
+package com.vito.framework;
 
 
 public interface bootstrap {

@@ -1,8 +1,8 @@
-package com.vito.com.vito.modules;
+package com.vito.modules;
 
 import com.google.inject.AbstractModule;
-import com.vito.com.vito.chain.DefaultChainManager;
-import com.vito.framework.com.vito.framework.ChainManager;
+import com.vito.chain.DefaultChainManager;
+import com.vito.framework.ChainManager;
 
 /**
  * Created with IntelliJ IDEA.

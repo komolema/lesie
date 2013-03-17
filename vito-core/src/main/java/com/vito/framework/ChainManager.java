@@ -1,6 +1,4 @@
-package com.vito.framework.com.vito.framework;
-
-import com.vito.com.vito.processor.Processor;
+package com.vito.framework;
 
 /**
  * Created with IntelliJ IDEA.

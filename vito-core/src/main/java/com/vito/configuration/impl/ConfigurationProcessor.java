@@ -1,7 +1,7 @@
-package com.vito.bootstrap.impl;
+package com.vito.configuration.impl;
 
-import com.vito.com.vito.processor.Processor;
-import com.vito.framework.com.vito.framework.Loader;
+import com.vito.framework.Processor;
+import com.vito.framework.Loader;
 
 /**
  * Created with IntelliJ IDEA.
@@ -10,7 +10,7 @@ import com.vito.framework.com.vito.framework.Loader;
  * Time: 2:25 PM
  * To change this template use File | Settings | File Templates.
  */
-public class BootStrapProcessor implements Processor<Loader> {
+public class ConfigurationProcessor implements Processor<Loader> {
     @Override
     public void handleRequest(Loader request) {
 

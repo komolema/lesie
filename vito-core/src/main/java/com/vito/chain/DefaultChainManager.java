@@ -1,8 +1,8 @@
-package com.vito.com.vito.chain;
+package com.vito.chain;
 
-import com.vito.com.vito.processor.Processor;
-import com.vito.framework.com.vito.framework.ChainManager;
-import com.vito.framework.com.vito.framework.Loader;
+import com.vito.framework.Processor;
+import com.vito.framework.ChainManager;
+import com.vito.framework.Loader;
 
 import java.util.Queue;
 
