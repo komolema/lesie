@@ -1,9 +1,10 @@
 package com.vito.chain;
 
+import com.google.common.collect.Table;
 import com.vito.framework.Processor;
 import com.vito.framework.ChainManager;
-import com.vito.framework.Loader;
 
+import java.util.Map;
 import java.util.Queue;
 
 /**
@@ -15,20 +16,25 @@ import java.util.Queue;
  */
 public class DefaultChainManager implements ChainManager {
 
-    private Queue<Processor<Loader>> processorQueue;
+    private Queue<Processor> processorQueue;
+    private Map configMap;
 
     @Override
     public void addProcessor(Processor processor) {
-
+        processorQueue.add(processor);
     }
 
-    @Override
-    public Processor removeProcessor() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
-    }
 
     @Override
     public void processChain() {
-        //To change body of implemented methods use File | Settings | File Templates.
+        Processor processor = processorQueue.poll();
+
+        if(processor != null){
+            configMap = processor.process(configMap);
+        }
+        else{
+            return;
+        }
+        processChain();
     }
 }

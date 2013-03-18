@@ -11,8 +11,6 @@ public interface ChainManager {
 
     public void addProcessor(Processor processor);
 
-    public Processor removeProcessor();
-
     public void processChain();
 
 }
