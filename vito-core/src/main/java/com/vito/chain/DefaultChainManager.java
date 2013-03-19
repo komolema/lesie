@@ -4,6 +4,8 @@ import com.google.common.collect.Table;
 import com.vito.framework.Processor;
 import com.vito.framework.ChainManager;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 
@@ -17,11 +19,26 @@ import java.util.Queue;
 public class DefaultChainManager implements ChainManager {
 
     private Queue<Processor> processorQueue;
-    private Map configMap;
+    private Map<String,String> configMap;
+
+    @Override
+    public void setConfig(Map<String, String> config) {
+        configMap = config;
+    }
 
     @Override
     public void addProcessor(Processor processor) {
         processorQueue.add(processor);
+    }
+
+    @Override
+    public void addProcessor(List<String> processors) throws Exception {
+        for(String procStr : processors){
+            Class procClass = Class.forName(procStr);
+            Processor processor = (Processor)procClass.newInstance();
+
+            addProcessor(processor);
+        }
     }
 
 

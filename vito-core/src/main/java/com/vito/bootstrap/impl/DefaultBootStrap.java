@@ -1,10 +1,10 @@
 package com.vito.bootstrap.impl;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.vito.framework.bootstrap;
-import com.vito.modules.DefaultBootupModule;
+import com.google.inject.Inject;
+import com.vito.framework.Bootstrap;
+import com.vito.framework.ChainManager;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -14,16 +14,40 @@ import java.util.Map;
  * Time: 2:12 PM
  * To change this template use File | Settings | File Templates.
  */
-public class DefaultBootStrap implements bootstrap {
+public class DefaultBootStrap implements Bootstrap {
 
-    private Map<String,String> processors;
+    @Inject
+    private List<String> processors;
+    @Inject
+    private ChainManager chainManager;
+    @Inject
+    private Map<String,String> config;
 
     @Override
-    public void init() {
+    public void init(Map<String,String> config) throws Exception {
 
-        // initialise the guice modules
-        Injector injector = Guice.createInjector(new DefaultBootupModule());
+        chainManager.setConfig(config);
+        chainManager.addProcessor(processors);
     }
 
 
+    public List<String> getProcessors() {
+        return processors;
+    }
+
+    public void setProcessors(List<String> processors) {
+        this.processors = processors;
+    }
+
+    public ChainManager getChainManager() {
+        return chainManager;
+    }
+
+    public void setChainManager(ChainManager chainManager) {
+        this.chainManager = chainManager;
+    }
+
+    public void setConfig(Map<String, String> config) {
+        this.config = config;
+    }
 }

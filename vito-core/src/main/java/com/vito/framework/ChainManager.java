@@ -1,15 +1,17 @@
 package com.vito.framework;
 
-/**
- * Created with IntelliJ IDEA.
- * User: karabom
- * Date: 3/17/13
- * Time: 8:12 PM
- * To change this template use File | Settings | File Templates.
- */
+import java.util.List;
+import java.util.Map;
+
+
+
 public interface ChainManager {
 
+    public void setConfig(Map<String,String> config)  ;
+
     public void addProcessor(Processor processor);
+
+    public void addProcessor(List<String> processors) throws Exception;
 
     public void processChain();
 
