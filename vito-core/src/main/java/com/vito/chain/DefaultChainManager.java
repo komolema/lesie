@@ -1,28 +1,21 @@
 package com.vito.chain;
 
+import com.google.common.collect.Multimap;
 import com.google.common.collect.Table;
+import com.google.inject.Inject;
 import com.vito.framework.Processor;
 import com.vito.framework.ChainManager;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
 
-/**
- * Created with IntelliJ IDEA.
- * User: karabom
- * Date: 3/17/13
- * Time: 11:22 PM
- * To change this template use File | Settings | File Templates.
- */
+
 public class DefaultChainManager implements ChainManager {
-
+    @Inject
     private Queue<Processor> processorQueue;
-    private Map<String,String> configMap;
+    private Map<String,List<String>> configMap;
 
     @Override
-    public void setConfig(Map<String, String> config) {
+    public void setConfig(Map<String,List<String>> config) {
         configMap = config;
     }
 
@@ -32,7 +25,7 @@ public class DefaultChainManager implements ChainManager {
     }
 
     @Override
-    public void addProcessor(List<String> processors) throws Exception {
+    public void addProcessor(Collection<String> processors) throws Exception {
         for(String procStr : processors){
             Class procClass = Class.forName(procStr);
             Processor processor = (Processor)procClass.newInstance();
@@ -53,5 +46,9 @@ public class DefaultChainManager implements ChainManager {
             return;
         }
         processChain();
+    }
+
+    public void setProcessorQueue(Queue<Processor> processorQueue) {
+        this.processorQueue = processorQueue;
     }
 }

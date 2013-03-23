@@ -1,9 +1,11 @@
 package com.vito.bootstrap.impl;
 
+import com.google.common.collect.Multimap;
 import com.google.inject.Inject;
 import com.vito.framework.Bootstrap;
 import com.vito.framework.ChainManager;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -16,18 +18,21 @@ import java.util.Map;
  */
 public class DefaultBootStrap implements Bootstrap {
 
-    @Inject
     private List<String> processors;
     @Inject
     private ChainManager chainManager;
-    @Inject
-    private Map<String,String> config;
+    private Map<String,List<String>> config;
 
     @Override
-    public void init(Map<String,String> config) throws Exception {
+    public void init(Map<String,List<String>> config) throws Exception {
 
         chainManager.setConfig(config);
+
+        Collection<String> processors = config.get("processors");
+
         chainManager.addProcessor(processors);
+
+        chainManager.processChain();
     }
 
 
@@ -47,7 +52,7 @@ public class DefaultBootStrap implements Bootstrap {
         this.chainManager = chainManager;
     }
 
-    public void setConfig(Map<String, String> config) {
+    public void setConfig(Map<String,List<String>> config) {
         this.config = config;
     }
 }

@@ -1,11 +1,14 @@
 package com.vito.com.vito.startup;
 
+import com.google.common.collect.Multimap;
 import com.google.inject.Guice;
+import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.vito.bootstrap.impl.DefaultBootStrap;
 import com.vito.framework.Bootstrap;
 import com.vito.modules.DefaultBootupModule;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -14,15 +17,22 @@ import java.util.Map;
  */
 public class Framework {
 
-    private Bootstrap bootStrap;
 
-    public void start(Map<String,String> config) throws Exception{
+
+    private Bootstrap  bootstrap;
+
+
+
+    public void start(Map<String,List<String>> config) throws Exception{
         Injector injector = Guice.createInjector(new DefaultBootupModule());
 
-        bootStrap =new DefaultBootStrap();
+        bootstrap = injector.getInstance(DefaultBootStrap.class);
+        bootstrap.init(config);
 
-        bootStrap.init(config);
+    }
 
-
+    @Inject
+    public void setBootstrap(Bootstrap bootstrap){
+        this.bootstrap = bootstrap;
     }
 }
