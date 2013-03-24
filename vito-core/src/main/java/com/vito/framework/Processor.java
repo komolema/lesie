@@ -7,5 +7,5 @@ import java.util.Map;
 
 
 public interface Processor<T> {
-    public Map<String,List<String>> process(T input);
+    public Map<String,List<String>> process(T config) throws Exception;
 }

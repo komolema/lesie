@@ -36,7 +36,7 @@ public class DefaultChainManager implements ChainManager {
 
 
     @Override
-    public void processChain() {
+    public void processChain() throws Exception {
         Processor processor = processorQueue.poll();
 
         if(processor != null){

@@ -1,8 +1,6 @@
-package com.vito.com.vito.startup;
+package com.vito.startup;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
+import com.vito.framework.Framework;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,7 +23,13 @@ public class FrameworkTest {
         config = new HashMap<String,List<String>>() ;
 
         List<String> processorList = new ArrayList<String>();
-        processorList.add("com.vito.configuration.impl.ConfigurationProcessor");
+        processorList.add("com.vito.configuration.ConfigurationProcessor");
+        processorList.add("com.vito.finder.FinderProcessor");
+
+        List<String> domainList = new ArrayList<String>();
+        domainList.add("com.vito.domain");
+        config.put("domain", domainList);
+
 
         config.put("processors",processorList);
 

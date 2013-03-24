@@ -1,4 +1,4 @@
-package com.vito.com.vito.startup;
+package com.vito.framework;
 
 import com.google.common.collect.Multimap;
 import com.google.inject.Guice;

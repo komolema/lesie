@@ -16,6 +16,6 @@ public interface ChainManager {
 
     public void addProcessor(Collection<String> processors) throws Exception;
 
-    public void processChain();
+    public void processChain() throws Exception;
 
 }
