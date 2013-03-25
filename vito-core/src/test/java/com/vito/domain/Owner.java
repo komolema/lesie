@@ -1,7 +1,7 @@
 package com.vito.domain;
 
-import com.vito.framework.gate.Gate;
+import com.vito.framework.mark.Mark;
 
-@Gate
+@Mark
 public class Owner {
 }
