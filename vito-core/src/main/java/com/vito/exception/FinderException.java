@@ -8,7 +8,7 @@ package com.vito.exception;
  * To change this template use File | Settings | File Templates.
  */
 public class FinderException extends Exception {
-    public FinderException(String s) {
-        super(s);
+    public FinderException(String message) {
+        super(message);
     }
 }

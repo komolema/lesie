@@ -1,6 +1,6 @@
 package com.vito.domain;
 
-import com.vito.framework.gate.Gate;
+import com.vito.framework.annotations.gate.Gate;
 
 /**
  * Created with IntelliJ IDEA.

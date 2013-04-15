@@ -11,6 +11,6 @@ public class ConfigurationProcessor implements Processor<Map<String,List<String>
     @Override
     public Map<String,List<String>> process(Map<String,List<String>> config) throws Exception{
       return config;
-    }
 
+    }
 }

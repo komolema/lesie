@@ -4,11 +4,13 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;
 import com.google.inject.TypeLiteral;
 import com.google.inject.binder.ScopedBindingBuilder;
+import com.google.inject.matcher.Matchers;
 import com.vito.bootstrap.impl.DefaultBootStrap;
 import com.vito.chain.DefaultChainManager;
 import com.vito.framework.Bootstrap;
 import com.vito.framework.ChainManager;
 import com.vito.framework.Processor;
+import com.vito.util.Slf4jTypeListener;
 
 import java.util.ArrayDeque;
 import java.util.LinkedList;
@@ -20,6 +22,7 @@ public class DefaultBootupModule extends AbstractModule {
     protected void configure() {
         bind(Bootstrap.class).to(DefaultBootStrap.class).in(Scopes.SINGLETON);
         bind(ChainManager.class).to(DefaultChainManager.class);
-        bind(new TypeLiteral<Queue<Processor>>(){}).to(new TypeLiteral<LinkedList<Processor>>(){}) ;
+        bind(new TypeLiteral<Queue<Processor>>(){}).to(new TypeLiteral<LinkedList<Processor>>(){});
+        bindListener(Matchers.any(), new Slf4jTypeListener());
     }
 }

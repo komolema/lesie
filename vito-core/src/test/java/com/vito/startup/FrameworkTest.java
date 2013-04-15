@@ -1,5 +1,6 @@
 package com.vito.startup;
 
+import com.vito.domain.Owner;
 import com.vito.framework.Framework;
 import org.junit.After;
 import org.junit.Before;
@@ -25,6 +26,7 @@ public class FrameworkTest {
         List<String> processorList = new ArrayList<String>();
         processorList.add("com.vito.configuration.ConfigurationProcessor");
         processorList.add("com.vito.finder.FinderProcessor");
+        processorList.add("com.vito.attacher.DefaultAttacher");
 
         List<String> domainList = new ArrayList<String>();
         domainList.add("com.vito.domain");
@@ -43,5 +45,8 @@ public class FrameworkTest {
     @Test
     public void testStart() throws Exception {
         framework.start(config);
+       // Owner owner = new Owner();
+
+       // owner.setId("123");
     }
 }

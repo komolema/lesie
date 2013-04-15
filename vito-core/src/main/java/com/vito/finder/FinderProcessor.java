@@ -3,17 +3,10 @@ package com.vito.finder;
 
 import com.vito.exception.FinderException;
 import com.vito.framework.Processor;
-import com.vito.framework.gate.Gate;
-import com.vito.framework.mark.Mark;
+import com.vito.framework.annotations.mark.Mark;
 import org.reflections.Reflections;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.net.URL;
 import java.util.*;
-import java.util.jar.JarEntry;
-import java.util.jar.JarInputStream;
 
 /*
  *Description: this class is responsible for locating all the domain classes that
