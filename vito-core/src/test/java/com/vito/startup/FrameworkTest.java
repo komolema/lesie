@@ -4,7 +4,9 @@ import com.vito.domain.Owner;
 import com.vito.framework.Framework;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
+import org.vito.loader.standard.StandardVitoLoader;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,10 +18,16 @@ public class FrameworkTest {
     private Framework framework;
     private Map<String,List<String>> config;
 
+    @BeforeClass
+    public static void setUpClass() throws Exception{
+        ClassLoader cl = Thread.currentThread().getContextClassLoader();
+        Thread.currentThread().setContextClassLoader(new StandardVitoLoader(cl));
+    }
     @Before
     public void setUp() throws Exception {
 
-        framework = new Framework();
+
+        framework =Framework.getInstance();
 
         config = new HashMap<String,List<String>>() ;
 
@@ -44,8 +52,8 @@ public class FrameworkTest {
 
     @Test
     public void testStart() throws Exception {
-        framework.start(config);
-       // Owner owner = new Owner();
+        //framework.start(config);
+        Owner owner = new Owner();
 
        // owner.setId("123");
     }

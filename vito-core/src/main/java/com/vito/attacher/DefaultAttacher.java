@@ -3,9 +3,12 @@ package com.vito.attacher;
 
 import com.vito.exception.AttacherException;import com.vito.framework.Processor;
 import com.vito.framework.annotations.mark.MarkId;
+import com.vito.util.LoaderUtil;
 import javassist.*;
+import org.vito.loader.VitoLoader;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +16,7 @@ public class DefaultAttacher  implements Processor<Map<String,List<String>>>{
 
     private final String MARK_CLASS = "markClass";
     private final String ID_MARKER = "id";
+
 
     @Override
     public Map<String, List<String>> process(Map<String, List<String>> config) throws Exception {
@@ -32,7 +36,7 @@ public class DefaultAttacher  implements Processor<Map<String,List<String>>>{
         return config;
     }
 
-    private void attachMarkClass(CtClass markCtClass,Class markClazz) throws ClassNotFoundException, AttacherException, CannotCompileException, NotFoundException, IOException {
+    private void attachMarkClass(CtClass markCtClass,Class markClazz) throws ClassNotFoundException, AttacherException, CannotCompileException, NotFoundException, IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 
         boolean idExistOnAnnotation = false;
         boolean idExistOnField = false;
@@ -71,7 +75,7 @@ public class DefaultAttacher  implements Processor<Map<String,List<String>>>{
                 String setterFieldName = methodName.substring(3).toLowerCase();
                 if(setterFieldName.equals(idFieldName)){
                     setterExist = true;
-                  //  ctMethod.insertAfter("{System.out.println(\"Hello World\");}");
+                    ctMethod.insertAfter("{System.out.println(\"Hello World\");}");
                 }
             }
         }
@@ -81,7 +85,21 @@ public class DefaultAttacher  implements Processor<Map<String,List<String>>>{
         }
 
         //attach code to this setter
-        markCtClass.toClass(markClazz.getClassLoader(),markClazz.getProtectionDomain());
+        //rename class and add to classloader
+        markCtClass.setName(markClazz.getName() + "OOO" + MARK_CLASS);
+        Class markModifiedClazz =markCtClass.toClass();
+        addClassToCL(MARK_CLASS,markModifiedClazz,markClazz);
 
+    }
+
+    private void addClassToCL(String classType,Class markModifiedClazz, Class modifiedClazz) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        ClassLoader cl =  modifiedClazz.getClassLoader();
+        String clazzName =  modifiedClazz.getCanonicalName();
+
+         if(classType.equals(MARK_CLASS)){
+             LoaderUtil.invokeMethodOnLoader(cl, "addMarkClass", clazzName, markModifiedClazz);
+         } else{
+             LoaderUtil.invokeMethodOnLoader(cl, "addGateClass", clazzName, markModifiedClazz);
+         }
     }
 }
