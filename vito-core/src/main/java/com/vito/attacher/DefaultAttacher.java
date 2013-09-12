@@ -1,3 +1,19 @@
+/**
+ *      Copyright 2013 CPUT
+ *
+ *      Licensed under the Apache License, Version 2.0 (the "License");
+ *      you may not use this file except in compliance with the License.
+ *      You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *      Unless required by applicable law or agreed to in writing, software
+ *      distributed under the License is distributed on an "AS IS" BASIS,
+ *      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *      See the License for the specific language governing permissions and
+ *      limitations under the License.
+ */
+
 package com.vito.attacher;
 
 
@@ -5,8 +21,6 @@ import com.vito.exception.AttacherException;import com.vito.framework.Processor;
 import com.vito.framework.annotations.mark.MarkId;
 import com.vito.util.LoaderUtil;
 import javassist.*;
-import org.vito.loader.VitoLoader;
-
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
@@ -25,9 +39,12 @@ public class DefaultAttacher  implements Processor<Map<String,List<String>>>{
             throw new AttacherException("No Mark Classes found");
         }
 
+        ClassLoader cl = Thread.currentThread().getContextClassLoader();
+        ClassPool classPool = ClassPool.getDefault();
+        classPool.insertClassPath(new LoaderClassPath(cl));
         for (String strMarkClass : config.get(MARK_CLASS)) {
             Class markClazz = Class.forName(strMarkClass);
-            CtClass markCtClass = ClassPool.getDefault().get(strMarkClass);
+            CtClass markCtClass = classPool.get(strMarkClass);
             attachMarkClass(markCtClass,markClazz);
 
         }
@@ -76,6 +93,7 @@ public class DefaultAttacher  implements Processor<Map<String,List<String>>>{
                 if(setterFieldName.equals(idFieldName)){
                     setterExist = true;
                     ctMethod.insertAfter("{System.out.println(\"Hello World\");}");
+                    ctMethod.setName("h");
                 }
             }
         }
@@ -86,9 +104,10 @@ public class DefaultAttacher  implements Processor<Map<String,List<String>>>{
 
         //attach code to this setter
         //rename class and add to classloader
-        markCtClass.setName(markClazz.getName() + "OOO" + MARK_CLASS);
-        Class markModifiedClazz =markCtClass.toClass();
-        addClassToCL(MARK_CLASS,markModifiedClazz,markClazz);
+        //markCtClass.setName(markClazz.getName() + "OOO" + MARK_CLASS);
+       // Class markModifiedClazz =markCtClass.toClass();
+        //addClassToCL(MARK_CLASS,markModifiedClazz,markClazz);
+        markCtClass.writeFile();
 
     }
 
