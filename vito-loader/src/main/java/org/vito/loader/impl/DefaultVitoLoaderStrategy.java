@@ -23,7 +23,7 @@ import java.util.Map;
 import java.util.Set;
 
 
-public class DefaultVitoLoaderStrategy{
+public class DefaultVitoLoaderStrategy {
 
     public static final String GATE_CLASS = "gate";
 
