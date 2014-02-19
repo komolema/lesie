@@ -26,8 +26,8 @@ import com.lesie.framework.annotations.logging.InjectLogger;
 import com.lesie.modules.DefaultBootupModule;
 import com.lesie.util.LoaderUtil;
 import org.slf4j.Logger;
-import org.lesie.loader.lesieLoader;
-import org.lesie.loader.web.TomcatlesieLoader;
+import org.lesie.loader.LesieLoader;
+import org.lesie.loader.web.TomcatLesieLoader;
 
 import java.util.List;
 import java.util.Map;

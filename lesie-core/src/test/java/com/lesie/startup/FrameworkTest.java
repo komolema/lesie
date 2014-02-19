@@ -22,7 +22,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.lesie.loader.standard.StandardlesieLoader;
+import org.lesie.loader.standard.StandardLesieLoader;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,7 +37,7 @@ public class FrameworkTest {
     @BeforeClass
     public static void setUpClass() throws Exception{
         ClassLoader cl = Thread.currentThread().getContextClassLoader();
-        Thread.currentThread().setContextClassLoader(new StandardlesieLoader(cl));
+        Thread.currentThread().setContextClassLoader(new StandardLesieLoader(cl));
     }
     @Before
     public void setUp() throws Exception {

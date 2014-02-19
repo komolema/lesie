@@ -18,6 +18,8 @@ package org.lesie.loader.web;
 
 import org.lesie.loader.LesieLoader;
 import org.apache.catalina.loader.WebappClassLoader;
+import org.lesie.loader.connection.Connector;
+import org.lesie.loader.connection.impl.ConnectorImpl;
 import org.lesie.loader.impl.DefaultLesieLoaderStrategy;
 
 import java.util.HashMap;
@@ -28,12 +30,16 @@ public class TomcatLesieLoader extends WebappClassLoader implements LesieLoader 
 
     private boolean frameworkStarted = false;
     private DefaultLesieLoaderStrategy loaderStrategy;
+    private Connector connector;
 
     private java.util.logging.Logger log = java.util.logging.Logger.getLogger(TomcatLesieLoader.class.getName());
 
     public TomcatLesieLoader(){
         super();
+        connector = new ConnectorImpl(9999,"localhost");
+        connector.connect();
         loaderStrategy = new DefaultLesieLoaderStrategy();
+
 
     }
 

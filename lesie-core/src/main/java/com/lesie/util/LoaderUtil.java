@@ -16,7 +16,7 @@
 
 package com.lesie.util;
 
-import org.lesie.loader.lesieLoader;
+import org.lesie.loader.LesieLoader;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -31,7 +31,7 @@ public class LoaderUtil {
      */
     public static boolean islesieClassLoader(ClassLoader cl) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
 
-        Class lesieLoaderClazz = cl.getParent().loadClass(lesieLoader.class.getCanonicalName());
+        Class lesieLoaderClazz = cl.getParent().loadClass(LesieLoader.class.getCanonicalName());
         Class<?>[] clInterfaces = cl.getClass().getInterfaces();
 
 
