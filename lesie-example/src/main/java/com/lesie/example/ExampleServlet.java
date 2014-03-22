@@ -61,15 +61,6 @@ public class ExampleServlet extends javax.servlet.http.HttpServlet {
 
         example.setId("123");
 
-        TomcatLesieLoader loader = new TomcatLesieLoader(Thread.currentThread().getContextClassLoader());
-        try {
-            Example example2 = (Example) loader.loadClass(Example.class.getCanonicalName()).newInstance();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        } catch (InstantiationException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
+
     }
 }

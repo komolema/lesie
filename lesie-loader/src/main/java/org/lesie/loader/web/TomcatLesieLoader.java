@@ -21,9 +21,9 @@ import org.apache.catalina.loader.WebappClassLoader;
 import org.lesie.loader.connection.Connector;
 import org.lesie.loader.connection.impl.ConnectorImpl;
 import org.lesie.loader.impl.DefaultLesieLoaderStrategy;
+import org.lesie.loader.util.LesieLogger;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.logging.Logger;
 
 
 public class TomcatLesieLoader extends WebappClassLoader implements LesieLoader {
@@ -32,34 +32,41 @@ public class TomcatLesieLoader extends WebappClassLoader implements LesieLoader 
     private DefaultLesieLoaderStrategy loaderStrategy;
     private Connector connector;
 
-    private java.util.logging.Logger log = java.util.logging.Logger.getLogger(TomcatLesieLoader.class.getName());
+    private Logger log = Logger.getLogger(TomcatLesieLoader.class.getName());
 
-    public TomcatLesieLoader(){
+    public TomcatLesieLoader() {
         super();
-        connector = new ConnectorImpl(9999,"localhost");
-        connector.connect();
-        loaderStrategy = new DefaultLesieLoaderStrategy();
-
+        lInit();
 
     }
 
-    public TomcatLesieLoader(ClassLoader parent){
+    public TomcatLesieLoader(ClassLoader parent) {
         super(parent);
+        lInit();
+    }
+
+    /* name: init
+     * description: this does the necessary initialisation for the Tomcat lesie loader
+     *
+     */
+    private void lInit() {
+        connector = new ConnectorImpl(9999, "localhost", log);
+        connector.connect();
         loaderStrategy = new DefaultLesieLoaderStrategy();
     }
 
     @Override
     public Class loadClass(String name) throws ClassNotFoundException {
 
-        if(frameworkStarted){
+        if (frameworkStarted) {
             log.info("lesie framework has been started");
 
             Class modifiedClass = loaderStrategy.getModifiedClass(name);
-            if(modifiedClass != null){
+            if (modifiedClass != null) {
                 return modifiedClass;
             }
 
-        }else{
+        } else {
             log.info("lesie framework has not been started as of yet");
         }
 
@@ -85,13 +92,13 @@ public class TomcatLesieLoader extends WebappClassLoader implements LesieLoader 
     }
 
     @Override
-    public void addGateClass(String classFullName,Class gateClass) {
-        loaderStrategy.addGateClass(classFullName,gateClass);
+    public void addGateClass(String classFullName, Class gateClass) {
+        loaderStrategy.addGateClass(classFullName, gateClass);
 
     }
 
     @Override
-    public void addMarkClass(String classFullName,Class markClass) {
-        loaderStrategy.addGateClass(classFullName,markClass);
+    public void addMarkClass(String classFullName, Class markClass) {
+        loaderStrategy.addGateClass(classFullName, markClass);
     }
 }
