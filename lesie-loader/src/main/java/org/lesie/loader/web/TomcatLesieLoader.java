@@ -18,10 +18,7 @@ package org.lesie.loader.web;
 
 import org.lesie.loader.LesieLoader;
 import org.apache.catalina.loader.WebappClassLoader;
-import org.lesie.loader.connection.Connector;
-import org.lesie.loader.connection.impl.ConnectorImpl;
 import org.lesie.loader.impl.DefaultLesieLoaderStrategy;
-import org.lesie.loader.util.LesieLogger;
 
 import java.util.logging.Logger;
 
@@ -30,7 +27,6 @@ public class TomcatLesieLoader extends WebappClassLoader implements LesieLoader 
 
     private boolean frameworkStarted = false;
     private DefaultLesieLoaderStrategy loaderStrategy;
-    private Connector connector;
 
     private Logger log = Logger.getLogger(TomcatLesieLoader.class.getName());
 
@@ -50,14 +46,13 @@ public class TomcatLesieLoader extends WebappClassLoader implements LesieLoader 
      *
      */
     private void lInit() {
-        connector = new ConnectorImpl(9999, "localhost", log);
-        connector.connect();
         loaderStrategy = new DefaultLesieLoaderStrategy();
     }
 
     @Override
     public Class loadClass(String name) throws ClassNotFoundException {
 
+/*
         if (frameworkStarted) {
             log.info("lesie framework has been started");
 
@@ -69,12 +64,17 @@ public class TomcatLesieLoader extends WebappClassLoader implements LesieLoader 
         } else {
             log.info("lesie framework has not been started as of yet");
         }
+*/
 
         return super.loadClass(name);    //To change body of overridden methods use File | Settings | File Templates.
     }
 
     @Override
     public Class findClass(String name) throws ClassNotFoundException {
+        Class modifiedClass = loaderStrategy.getModifiedClass(name);
+        if (modifiedClass != null) {
+            return modifiedClass;
+        }
         return super.findClass(name);    //To change body of overridden methods use File | Settings | File Templates.
     }
 

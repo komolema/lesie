@@ -16,10 +16,10 @@
 
 package com.lesie.domain;
 
-import com.lesie.framework.annotations.mark.Mark;
+import com.lesie.framework.annotations.mark.Marked;
 import com.lesie.framework.annotations.mark.MarkId;
 
-@Mark
+@Marked
 public class Owner {
 
     @MarkId

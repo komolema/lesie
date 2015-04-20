@@ -19,7 +19,7 @@ package com.lesie.finder;
 
 import com.lesie.exception.FinderException;
 import com.lesie.framework.Processor;
-import com.lesie.framework.annotations.mark.Mark;
+import com.lesie.framework.annotations.mark.Marked;
 import org.reflections.Reflections;
 
 import java.util.*;
@@ -46,7 +46,7 @@ public class FinderProcessor  implements Processor<Map<String,List<String>>> {
         //get a list of all the classes annotated with @Mark
         for(String domainDir : domainDirList){
             Reflections reflections = new Reflections(domainDir);
-            Set<Class<?>> markClasses = reflections.getTypesAnnotatedWith(Mark.class);
+            Set<Class<?>> markClasses = reflections.getTypesAnnotatedWith(Marked.class);
 
 
             if(config.containsKey(MARK_CLASS)){
