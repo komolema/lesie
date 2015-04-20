@@ -32,18 +32,12 @@ public class ExampleServlet extends javax.servlet.http.HttpServlet {
         HashMap<String, List<String>> config = new HashMap<String, List<String>>();;
 
         List<String> processorList = new ArrayList<String>();
-        processorList.add("com.lesie.configuration.ConfigurationProcessor");
         processorList.add("com.lesie.finder.FinderProcessor");
         processorList.add("com.lesie.attacher.DefaultAttacher");
 
         List<String> domainList = new ArrayList<String>();
-        domainList.add("com.lesie.example.domain");
+        domainList.add("org.lesie.example.domain");
         config.put("domain", domainList);
-
-        List<String> envList = new ArrayList<String>();
-        envList.add("tomcat");
-        config.put("env",envList);
-
         config.put("processors",processorList);
         try {
             lesieFramework.getInstance().start(config);

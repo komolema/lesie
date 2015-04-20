@@ -72,11 +72,9 @@ public class Framework {
         Injector injector = Guice.createInjector(new DefaultBootupModule());
         ClassLoader cl = Thread.currentThread().getContextClassLoader();
         bootstrap = injector.getInstance(DefaultBootStrap.class);
-        String runtime_env = config.get("env").get(0);
 
         if(LoaderUtil.islesieClassLoader(cl)){
 
-            //boolean lesieLoaderClazz;
             started = true;
             bootstrap.init(config);
             LoaderUtil.invokeMethodOnLoader(cl,"setFrameworkStarted",true);

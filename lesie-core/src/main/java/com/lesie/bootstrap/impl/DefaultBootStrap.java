@@ -35,7 +35,7 @@ public class DefaultBootStrap implements Bootstrap {
     public void init(Map<String,List<String>> config) throws Exception {
 
         chainManager.setConfig(config);
-
+        //TODO:Add processors manually here
         Collection<String> processors = config.get("processors");
 
         chainManager.addProcessor(processors);
