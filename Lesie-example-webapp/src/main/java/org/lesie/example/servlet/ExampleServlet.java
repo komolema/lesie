@@ -16,38 +16,12 @@
 
 package org.lesie.example.servlet;
 
-import com.lesie.framework.Framework;
 import org.lesie.example.domain.Example;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 
 public class ExampleServlet extends javax.servlet.http.HttpServlet {
-
-    Framework lesieFramework;
-    public void init(){
-        HashMap<String, List<String>> config = new HashMap<String, List<String>>();;
-
-        List<String> processorList = new ArrayList<String>();
-        processorList.add("com.lesie.finder.FinderProcessor");
-        processorList.add("com.lesie.attacher.DefaultAttacher");
-
-        List<String> domainList = new ArrayList<String>();
-        domainList.add("org.lesie.example.domain");
-        config.put("domain", domainList);
-        config.put("processors",processorList);
-        try {
-            lesieFramework.getInstance().start(config);
-        } catch (Exception e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-    }
-    protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
-
-    }
 
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         Example example = new Example();

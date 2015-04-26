@@ -14,11 +14,15 @@
  *      limitations under the License.
  */
 
-package com.lesie.framework;
+package org.lesie.framework;
+import com.google.common.collect.Multimap;
+
+import java.util.List;
+import java.util.Map;
 
 
-import com.lesie.policy.PolicyInfo;
+public interface Bootstrap {
 
-public interface Policy {
-    public PolicyInfo generate();
+    public void init(Map<String,List<String>> config) throws Exception;
+
 }

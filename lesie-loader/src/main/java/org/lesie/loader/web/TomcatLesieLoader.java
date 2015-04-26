@@ -16,10 +16,12 @@
 
 package org.lesie.loader.web;
 
+import org.lesie.attacher.DefaultAttacher;
 import org.lesie.loader.LesieLoader;
 import org.apache.catalina.loader.WebappClassLoader;
 import org.lesie.loader.impl.DefaultLesieLoaderStrategy;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
@@ -27,6 +29,7 @@ public class TomcatLesieLoader extends WebappClassLoader implements LesieLoader 
 
     private boolean frameworkStarted = false;
     private DefaultLesieLoaderStrategy loaderStrategy;
+    private DefaultAttacher da;
 
     private Logger log = Logger.getLogger(TomcatLesieLoader.class.getName());
 
@@ -47,34 +50,29 @@ public class TomcatLesieLoader extends WebappClassLoader implements LesieLoader 
      */
     private void lInit() {
         loaderStrategy = new DefaultLesieLoaderStrategy();
+        da = new DefaultAttacher();
     }
 
     @Override
     public Class loadClass(String name) throws ClassNotFoundException {
+        log.info("lesie framework has been started");
 
-/*
-        if (frameworkStarted) {
-            log.info("lesie framework has been started");
-
-            Class modifiedClass = loaderStrategy.getModifiedClass(name);
-            if (modifiedClass != null) {
-                return modifiedClass;
-            }
-
-        } else {
-            log.info("lesie framework has not been started as of yet");
+        Class modifiedClass = null;
+        try {
+            modifiedClass = da.weaveCodeToClass(name,this);
+        } catch (Exception e) {
+            log.log(Level.ALL,e.getMessage());
         }
-*/
+        if (modifiedClass != null) {
+            return modifiedClass;
+        }
 
-        return super.loadClass(name);    //To change body of overridden methods use File | Settings | File Templates.
+
+        return super.loadClass(name);
     }
 
     @Override
     public Class findClass(String name) throws ClassNotFoundException {
-        Class modifiedClass = loaderStrategy.getModifiedClass(name);
-        if (modifiedClass != null) {
-            return modifiedClass;
-        }
         return super.findClass(name);    //To change body of overridden methods use File | Settings | File Templates.
     }
 

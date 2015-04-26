@@ -14,11 +14,11 @@
  *      limitations under the License.
  */
 
-package com.lesie.bootstrap.impl;
+package org.lesie.bootstrap;
 
 import com.google.inject.Inject;
-import com.lesie.framework.Bootstrap;
-import com.lesie.framework.ChainManager;
+import org.lesie.framework.Bootstrap;
+import org.lesie.framework.ChainManager;
 
 import java.util.Collection;
 import java.util.List;

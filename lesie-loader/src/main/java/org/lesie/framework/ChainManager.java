@@ -13,24 +13,21 @@
  *      See the License for the specific language governing permissions and
  *      limitations under the License.
  */
-
-package com.lesie.domain;
-
-import com.lesie.framework.annotations.mark.Marked;
-import com.lesie.framework.annotations.mark.MarkId;
-
-@Marked
-public class Owner {
-
-    @MarkId
-    private String id;
+package org.lesie.framework;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 
-    public String getId() {
-        return id;
-    }
 
-    public void setId(String id) {
-        this.id = id;
-    }
+public interface ChainManager {
+
+    public void setConfig(Map<String,List<String>> config)  ;
+
+    public void addProcessor(Processor processor);
+
+    public void addProcessor(Collection<String> processors) throws Exception;
+
+    public void processChain() throws Exception;
+
 }

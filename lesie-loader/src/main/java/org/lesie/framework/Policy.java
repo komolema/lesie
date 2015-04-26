@@ -14,14 +14,11 @@
  *      limitations under the License.
  */
 
-package com.lesie.framework;
-
-import com.google.common.collect.Multimap;
-
-import java.util.List;
-import java.util.Map;
+package org.lesie.framework;
 
 
-public interface Processor<T> {
-    public Map<String,List<String>> process(T config) throws Exception;
+import org.lesie.policy.PolicyInfo;
+
+public interface Policy {
+    public PolicyInfo generate();
 }

@@ -13,22 +13,18 @@
  *      See the License for the specific language governing permissions and
  *      limitations under the License.
  */
+package org.lesie.framework;
 
-package com.lesie.framework;
-
-import com.google.common.collect.Multimap;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
-import com.lesie.bootstrap.impl.DefaultBootStrap;
-import com.lesie.framework.Bootstrap;
 import com.lesie.framework.annotations.logging.InjectLogger;
-import com.lesie.modules.DefaultBootupModule;
-import com.lesie.util.LoaderUtil;
+import org.lesie.bootstrap.DefaultBootStrap;
+import org.lesie.modules.DefaultBootupModule;
 import org.slf4j.Logger;
-import org.lesie.loader.LesieLoader;
-import org.lesie.loader.web.TomcatLesieLoader;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -68,26 +64,43 @@ public class Framework {
     }
 
 
-    public void start(Map<String,List<String>> config) throws Exception{
+    public void start(Map<String, List<String>> annotedPackages) throws Exception{
+
         Injector injector = Guice.createInjector(new DefaultBootupModule());
         ClassLoader cl = Thread.currentThread().getContextClassLoader();
         bootstrap = injector.getInstance(DefaultBootStrap.class);
 
-        if(LoaderUtil.islesieClassLoader(cl)){
+     //   if(LoaderUtil.islesieClassLoader(cl)){
 
             started = true;
+            Map<String,List<String>> config = configureLesie();
+            config.putAll(annotedPackages);
             bootstrap.init(config);
-            LoaderUtil.invokeMethodOnLoader(cl,"setFrameworkStarted",true);
+          //  LoaderUtil.invokeMethodOnLoader(cl,"setFrameworkStarted",true);
 
-        }else{
-            log.info("V-001:ClassLoader is not of type lesieLoader");
-        }
+   //     }else{
+     //       log.info("V-001:ClassLoader is not of type lesieLoader");
+       // }
 
 
+    }
+
+    private Map<String, List<String>> configureLesie() {
+        HashMap<String, List<String>> config = new HashMap<String, List<String>>();;
+
+        List<String> processorList = new ArrayList<String>();
+        processorList.add("finder.FinderProcessor");
+        processorList.add("attacher.DefaultAttacher");
+
+        List<String> domainList = new ArrayList<String>();
+        config.put("processors",processorList);
+
+        return config;
     }
 
     @Inject
     public void setBootstrap(Bootstrap bootstrap){
         this.bootstrap = bootstrap;
     }
+
 }

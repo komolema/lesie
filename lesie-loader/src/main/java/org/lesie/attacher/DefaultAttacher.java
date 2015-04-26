@@ -14,22 +14,24 @@
  *      limitations under the License.
  */
 
-package com.lesie.attacher;
+package org.lesie.attacher;
 
 
-import com.lesie.exception.AttacherException;import com.lesie.framework.Processor;
 import com.lesie.framework.annotations.mark.MarkId;
-import com.lesie.util.LoaderUtil;
 import javassist.*;
+import org.lesie.exception.AttacherException;
+import org.lesie.framework.Processor;
+
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
 
-public class DefaultAttacher  implements Processor<Map<String,List<String>>>{
+public class DefaultAttacher  implements Processor<Map<String,List<String>>> {
 
     private final String MARK_CLASS = "markClass";
     private final String ID_MARKER = "id";
+    private ClassPool classPool = null;
 
 
     @Override
@@ -43,9 +45,8 @@ public class DefaultAttacher  implements Processor<Map<String,List<String>>>{
         ClassPool classPool = ClassPool.getDefault();
         classPool.insertClassPath(new LoaderClassPath(cl));
         for (String strMarkClass : config.get(MARK_CLASS)) {
-            Class markClazz = Class.forName(strMarkClass);
             CtClass markCtClass = classPool.get(strMarkClass);
-            attachMarkClass(markCtClass,markClazz);
+            attachMarkClass(markCtClass);
 
         }
 
@@ -53,7 +54,20 @@ public class DefaultAttacher  implements Processor<Map<String,List<String>>>{
         return config;
     }
 
-    private void attachMarkClass(CtClass markCtClass,Class markClazz) throws ClassNotFoundException, AttacherException, CannotCompileException, NotFoundException, IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+    public Class weaveCodeToClass(String name,ClassLoader cl) throws Exception {
+        initClassPool(cl);
+        CtClass lesieAnnotatedClass = classPool.get(name);
+        return attachMarkClass(lesieAnnotatedClass);
+    }
+
+    private void initClassPool(ClassLoader cl) {
+        if(classPool == null) {
+            classPool = ClassPool.getDefault();
+            classPool.insertClassPath(new LoaderClassPath(cl));
+        }
+    }
+
+    private Class attachMarkClass(CtClass markCtClass) throws ClassNotFoundException, AttacherException, CannotCompileException, NotFoundException, IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 
         boolean idExistOnAnnotation = false;
         boolean idExistOnField = false;
@@ -107,18 +121,7 @@ public class DefaultAttacher  implements Processor<Map<String,List<String>>>{
         //markCtClass.setName(markClazz.getName() + "OOO" + MARK_CLASS);
        // Class markModifiedClazz =markCtClass.toClass();
         //addClassToCL(MARK_CLASS,markModifiedClazz,markClazz);
-        markCtClass.writeFile();
+        return markCtClass.toClass();
 
-    }
-
-    private void addClassToCL(String classType,Class markModifiedClazz, Class modifiedClazz) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-        ClassLoader cl =  modifiedClazz.getClassLoader();
-        String clazzName =  modifiedClazz.getCanonicalName();
-
-         if(classType.equals(MARK_CLASS)){
-             LoaderUtil.invokeMethodOnLoader(cl, "addMarkClass", clazzName, markModifiedClazz);
-         } else{
-             LoaderUtil.invokeMethodOnLoader(cl, "addGateClass", clazzName, markModifiedClazz);
-         }
     }
 }
