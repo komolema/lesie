@@ -57,17 +57,11 @@ public class TomcatLesieLoader extends WebappClassLoader implements LesieLoader 
     public Class loadClass(String name) throws ClassNotFoundException {
         log.info("lesie framework has been started");
 
-        Class modifiedClass = null;
         try {
-            modifiedClass = da.weaveCodeToClass(name,this);
+            da.weaveCodeToClass(name,this);
         } catch (Exception e) {
             log.log(Level.ALL,e.getMessage());
         }
-        if (modifiedClass != null) {
-            return modifiedClass;
-        }
-
-
         return super.loadClass(name);
     }
 

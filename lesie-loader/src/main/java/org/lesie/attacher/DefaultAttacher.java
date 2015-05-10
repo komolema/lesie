@@ -54,10 +54,10 @@ public class DefaultAttacher  implements Processor<Map<String,List<String>>> {
         return config;
     }
 
-    public Class weaveCodeToClass(String name,ClassLoader cl) throws Exception {
+    public void weaveCodeToClass(String name,ClassLoader cl) throws Exception {
         initClassPool(cl);
         CtClass lesieAnnotatedClass = classPool.get(name);
-        return attachMarkClass(lesieAnnotatedClass);
+        attachMarkClass(lesieAnnotatedClass);
     }
 
     private void initClassPool(ClassLoader cl) {
@@ -67,7 +67,7 @@ public class DefaultAttacher  implements Processor<Map<String,List<String>>> {
         }
     }
 
-    private Class attachMarkClass(CtClass markCtClass) throws ClassNotFoundException, AttacherException, CannotCompileException, NotFoundException, IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+    private void attachMarkClass(CtClass markCtClass) throws ClassNotFoundException, AttacherException, CannotCompileException, NotFoundException, IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 
         boolean idExistOnAnnotation = false;
         boolean idExistOnField = false;
@@ -89,9 +89,6 @@ public class DefaultAttacher  implements Processor<Map<String,List<String>>> {
                     idFieldName = ctField.getName();
                 }
             }
-
-
-
         }
 
         if(!idExistOnAnnotation && !idExistOnField){
@@ -106,8 +103,7 @@ public class DefaultAttacher  implements Processor<Map<String,List<String>>> {
                 String setterFieldName = methodName.substring(3).toLowerCase();
                 if(setterFieldName.equals(idFieldName)){
                     setterExist = true;
-                    ctMethod.insertAfter("{System.out.println(\"Hello World\");}");
-                    ctMethod.setName("h");
+                    generate(markCtClass, ctMethod, methodName);
                 }
             }
         }
@@ -116,12 +112,22 @@ public class DefaultAttacher  implements Processor<Map<String,List<String>>> {
             throw new AttacherException("No Setter found for Annotatted field");
         }
 
-        //attach code to this setter
-        //rename class and add to classloader
-        //markCtClass.setName(markClazz.getName() + "OOO" + MARK_CLASS);
-       // Class markModifiedClazz =markCtClass.toClass();
-        //addClassToCL(MARK_CLASS,markModifiedClazz,markClazz);
-        return markCtClass.toClass();
 
+        markCtClass.writeFile();
+
+    }
+
+    private void generate(CtClass markCtClass, CtMethod ctMethod, String methodName) throws CannotCompileException {
+        CtMethod mNew = CtNewMethod.copy(ctMethod, methodName, markCtClass, null);
+        String nMethodName = methodName + "$Impl";
+        ctMethod.setName(nMethodName);
+
+        //build method body
+        StringBuffer body = new StringBuffer();
+        body.append("{System.out.println(\"Hello World\");}");
+
+        mNew.setBody(body.toString());
+
+        markCtClass.addMethod(mNew);
     }
 }
