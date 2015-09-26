@@ -1,6 +1,6 @@
 package org.lesie.example.domain;
 
-import com.lesie.framework.annotations.mark.Marked;
+import com.lesie.framework.annotations.Marked;
 
 
 @Marked

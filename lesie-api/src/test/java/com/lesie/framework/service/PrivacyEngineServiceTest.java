@@ -13,14 +13,26 @@
  *      See the License for the specific language governing permissions and
  *      limitations under the License.
  */
-package org.lesie.framework;
 
-import com.google.common.collect.Multimap;
-
-import java.util.List;
-import java.util.Map;
+package com.lesie.framework.service;
 
 
-public interface Processor<T> {
-    public Map<String,List<String>> process(T config) throws Exception;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+public class PrivacyEngineServiceTest {
+
+    private PrivacyEngineService privacyEngineService;
+
+    @Before
+    public void init(){
+        privacyEngineService = new PrivacyEngineService();
+    }
+
+    @Test
+    public void testCanShare(){
+        String result = privacyEngineService.canShare("1", "2", "3");
+        Assert.assertEquals("Not a success", "Y", result);
+    }
 }

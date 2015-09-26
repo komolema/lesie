@@ -13,14 +13,10 @@
  *      See the License for the specific language governing permissions and
  *      limitations under the License.
  */
-package org.lesie.framework;
 
-import com.google.common.collect.Multimap;
-
-import java.util.List;
-import java.util.Map;
+package com.lesie.framework.exception;
 
 
-public interface Processor<T> {
-    public Map<String,List<String>> process(T config) throws Exception;
+public class SharingException extends Exception{
+
 }

@@ -1,5 +1,5 @@
 /**
- *      Copyright 2014 CPUT
+ *      Copyright 2015 CPUT
  *
  *      Licensed under the Apache License, Version 2.0 (the "License");
  *      you may not use this file except in compliance with the License.
@@ -15,9 +15,23 @@
  */
 
 package org.lesie.attacher;
+/**
+ *      Copyright 2015 CPUT
+ *
+ *      Licensed under the Apache License, Version 2.0 (the "License");
+ *      you may not use this file except in compliance with the License.
+ *      You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *      Unless required by applicable law or agreed to in writing, software
+ *      distributed under the License is distributed on an "AS IS" BASIS,
+ *      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *      See the License for the specific language governing permissions and
+ *      limitations under the License.
+ */
 
-
-import com.lesie.framework.annotations.mark.MarkId;
+import com.lesie.framework.annotations.Marked;
 import javassist.*;
 import org.lesie.exception.AttacherException;
 import org.lesie.framework.Processor;
@@ -77,7 +91,7 @@ public class DefaultAttacher  implements Processor<Map<String,List<String>>> {
         for (CtField ctField : markCtClass.getDeclaredFields()) {
 
             for (Object annotation : ctField.getAnnotations()) {
-                if(annotation instanceof MarkId) {
+                if(annotation instanceof Marked) {
                     idExistOnAnnotation = true;
                     idFieldName = ctField.getName();
                 }

@@ -13,14 +13,13 @@
  *      See the License for the specific language governing permissions and
  *      limitations under the License.
  */
-package org.lesie.framework;
 
-import com.google.common.collect.Multimap;
-
-import java.util.List;
-import java.util.Map;
+package com.lesie.framework.annotations;
 
 
-public interface Processor<T> {
-    public Map<String,List<String>> process(T config) throws Exception;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Marked {
 }
