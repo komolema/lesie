@@ -14,27 +14,22 @@
  *      limitations under the License.
  */
 
-package com.lesie.framework.service;
+package com.lesie.framework;
+
+import com.lesie.framework.annotations.Key;
+import com.lesie.framework.annotations.Marked;
 
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+@Marked
+public class Example {
+    @Key("owner")
+    private String id;
 
-@Ignore
-public class PrivacyEngineServiceTest {
-
-    private PrivacyEngineService privacyEngineService;
-
-    @Before
-    public void init(){
-        privacyEngineService = new PrivacyEngineService();
+    public String getId() {
+        return id;
     }
 
-    @Test
-    public void testCanShare(){
-        String result = privacyEngineService.canShare("1", "2", "3");
-        Assert.assertEquals("Not a success", "Y", result);
+    public void setId(String id) {
+        this.id = id;
     }
 }

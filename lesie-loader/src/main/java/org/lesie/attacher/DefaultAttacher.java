@@ -15,25 +15,20 @@
  */
 
 package org.lesie.attacher;
-/**
- *      Copyright 2015 CPUT
- *
- *      Licensed under the Apache License, Version 2.0 (the "License");
- *      you may not use this file except in compliance with the License.
- *      You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *      Unless required by applicable law or agreed to in writing, software
- *      distributed under the License is distributed on an "AS IS" BASIS,
- *      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *      See the License for the specific language governing permissions and
- *      limitations under the License.
- */
 
+
+import com.lesie.framework.annotations.ExitPoint;
+import com.lesie.framework.annotations.Gate;
+import com.lesie.framework.annotations.Key;
 import com.lesie.framework.annotations.Marked;
 import javassist.*;
-import org.lesie.exception.AttacherException;
+import javassist.bytecode.LocalVariableAttribute;
+import javassist.bytecode.MethodInfo;
+import javassist.bytecode.ParameterAnnotationsAttribute;
+import javassist.bytecode.annotation.Annotation;
+import javassist.bytecode.annotation.AnnotationImpl;
+import javassist.util.proxy.Proxy;
+import org.lesie.exception.WeaveException;
 import org.lesie.framework.Processor;
 
 import java.io.IOException;
@@ -41,7 +36,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
 
-public class DefaultAttacher  implements Processor<Map<String,List<String>>> {
+public class DefaultAttacher implements Processor<Map<String, List<String>>> {
 
     private final String MARK_CLASS = "markClass";
     private final String ID_MARKER = "id";
@@ -51,8 +46,8 @@ public class DefaultAttacher  implements Processor<Map<String,List<String>>> {
     @Override
     public Map<String, List<String>> process(Map<String, List<String>> config) throws Exception {
 
-        if(!config.containsKey(MARK_CLASS)){
-            throw new AttacherException("No Mark Classes found");
+        if (!config.containsKey(MARK_CLASS)) {
+            throw new WeaveException("No Mark Classes found");
         }
 
         ClassLoader cl = Thread.currentThread().getContextClassLoader();
@@ -60,7 +55,7 @@ public class DefaultAttacher  implements Processor<Map<String,List<String>>> {
         classPool.insertClassPath(new LoaderClassPath(cl));
         for (String strMarkClass : config.get(MARK_CLASS)) {
             CtClass markCtClass = classPool.get(strMarkClass);
-            attachMarkClass(markCtClass);
+            weaveCode(markCtClass);
 
         }
 
@@ -68,67 +63,69 @@ public class DefaultAttacher  implements Processor<Map<String,List<String>>> {
         return config;
     }
 
-    public void weaveCodeToClass(String name,ClassLoader cl) throws Exception {
+    public void weaveCodeToClass(String name, ClassLoader cl) throws Exception {
         initClassPool(cl);
         CtClass lesieAnnotatedClass = classPool.get(name);
-        attachMarkClass(lesieAnnotatedClass);
+        weaveCode(lesieAnnotatedClass);
     }
 
-    private void initClassPool(ClassLoader cl) {
-        if(classPool == null) {
-            classPool = ClassPool.getDefault();
-            classPool.insertClassPath(new LoaderClassPath(cl));
-        }
-    }
-
-    private void attachMarkClass(CtClass markCtClass) throws ClassNotFoundException, AttacherException, CannotCompileException, NotFoundException, IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-
-        boolean idExistOnAnnotation = false;
-        boolean idExistOnField = false;
-        boolean setterExist = false;
-        String idFieldName = "";
-        //1.first check to see if there is a identification annotation
-        for (CtField ctField : markCtClass.getDeclaredFields()) {
-
-            for (Object annotation : ctField.getAnnotations()) {
-                if(annotation instanceof Marked) {
-                    idExistOnAnnotation = true;
-                    idFieldName = ctField.getName();
-                }
-            }
-
-            if(!idExistOnAnnotation){
-                if(ctField.getName().toLowerCase().equals(ID_MARKER)){
-                    idExistOnField = true;
-                    idFieldName = ctField.getName();
+    private void weaveCode(CtClass markCtClass) throws ClassNotFoundException, WeaveException, CannotCompileException, NotFoundException, IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        if (markCtClass.hasAnnotation(Gate.class)) {
+            for (CtMethod method : markCtClass.getDeclaredMethods()) {
+                if (method.hasAnnotation(ExitPoint.class)) {
+                    markCtClass.addMethod(generateMethod(method, markCtClass));
                 }
             }
         }
-
-        if(!idExistOnAnnotation && !idExistOnField){
-            throw new AttacherException("No Identification field found");
-        }
-
-        //check to see if this method has a Setter
-        for (CtMethod ctMethod : markCtClass.getDeclaredMethods()) {
-
-            String methodName = ctMethod.getName();
-            if(methodName.startsWith("set")){
-                String setterFieldName = methodName.substring(3).toLowerCase();
-                if(setterFieldName.equals(idFieldName)){
-                    setterExist = true;
-                    generate(markCtClass, ctMethod, methodName);
-                }
-            }
-        }
-
-        if(!setterExist){
-            throw new AttacherException("No Setter found for Annotatted field");
-        }
-
 
         markCtClass.writeFile();
 
+    }
+
+    private CtMethod generateMethod(CtMethod ctMethod, CtClass ctClass) throws CannotCompileException {
+        //get keys from contextual information on methods
+        int thirdPartyKeyIndex = -1;
+        int holderKeyIndex = -1;
+        int ownerKeyIndex = 0;
+        MethodInfo methodInfo = ctMethod.getMethodInfo();
+        LocalVariableAttribute table = (LocalVariableAttribute) methodInfo.getCodeAttribute().getAttribute(LocalVariableAttribute.tag);
+
+        int frameWithNameAtConstantPool = table.nameIndex(2);
+        String variableName = methodInfo.getConstPool().getUtf8Info(frameWithNameAtConstantPool);
+
+        Annotation[][] methodAnnotations = ((ParameterAnnotationsAttribute)
+                ctMethod.getMethodInfo().getAttribute(ParameterAnnotationsAttribute.visibleTag)).getAnnotations();
+        for(int i=0; i != methodAnnotations.length; i++){
+            for(int j=0; j != methodAnnotations[i].length; j++){
+                String typeValue = methodAnnotations[i][j].getMemberValue("value").toString();
+                if(typeValue.equals("thirdParty")){
+                    thirdPartyKeyIndex = i;
+                }else if(typeValue.equals("holder")){
+                    holderKeyIndex = i;
+                }else if(typeValue.equals("owner")){
+                    ownerKeyIndex = i;
+                }
+            }
+        }
+
+        CtMethod genMethod = CtNewMethod.copy(ctMethod, ctMethod.getName(), ctClass, null);
+        String newMethodName = ctMethod.getName() + "$Impl";
+        ctMethod.setName(newMethodName);
+
+        //build method body
+        StringBuffer body = new StringBuffer();
+        body.append("{");
+        body.append("com.lesie.framework.util.KeySorter.sort" + "($$);");
+        body.append("com.lesie.framework.service.PrivacyEngineService privacyEngineService = new com.lesie.framework.service.PrivacyEngineService();");
+        body.append("String result = privacyEngineService.canShare(com.lesie.framework.util.KeySorter.ThirdPartyKey, " +
+                "com.lesie.framework.util.KeySorter.HolderKey, com.lesie.framework.util.KeySorter.OwnerKey);");
+        body.append("if(result.equals(\"Y\")){" +
+                newMethodName + "($$);"
+                + "}else{throw new Exception(\"Engine says no\");}");
+        body.append("}");
+        genMethod.setBody(body.toString());
+
+        return genMethod;
     }
 
     private void generate(CtClass markCtClass, CtMethod ctMethod, String methodName) throws CannotCompileException {
@@ -143,5 +140,12 @@ public class DefaultAttacher  implements Processor<Map<String,List<String>>> {
         mNew.setBody(body.toString());
 
         markCtClass.addMethod(mNew);
+    }
+
+    private void initClassPool(ClassLoader cl) {
+        if (classPool == null) {
+            classPool = ClassPool.getDefault();
+            classPool.insertClassPath(new LoaderClassPath(cl));
+        }
     }
 }

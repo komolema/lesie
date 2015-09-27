@@ -14,27 +14,20 @@
  *      limitations under the License.
  */
 
-package com.lesie.framework.service;
 
+package com.lesie.framework;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import com.lesie.framework.annotations.ExitPoint;
+import com.lesie.framework.annotations.Gate;
+import com.lesie.framework.annotations.Key;
 
-@Ignore
-public class PrivacyEngineServiceTest {
+@Gate
+public class ShareService {
 
-    private PrivacyEngineService privacyEngineService;
+    @ExitPoint
+    public void shareData(@Key("thirdParty") String thirdPartyKey,
+                          @Key("holder") String holderKey,
+                          Example example) {
 
-    @Before
-    public void init(){
-        privacyEngineService = new PrivacyEngineService();
-    }
-
-    @Test
-    public void testCanShare(){
-        String result = privacyEngineService.canShare("1", "2", "3");
-        Assert.assertEquals("Not a success", "Y", result);
     }
 }
