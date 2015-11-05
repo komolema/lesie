@@ -18,6 +18,7 @@ package com.lesie.framework.service;
 
 
 import com.lesie.framework.request.SharingRequest;
+import com.lesie.framework.response.SharingResponse;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -38,14 +39,14 @@ public class PrivacyEngineServiceTest {
     @Test
     public void testCanShare(){
 
-        SharingRequest request = new SharingRequest("e123", "ck1", "w123", "ct1",
+        SharingRequest request = new SharingRequest("e123", "ck1", "w123", "ct2",
                 new HashMap<String, String>());
-        String result = null;
+        SharingResponse result = null;
         try {
             result = privacyEngineService.canShare(request);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Assert.assertEquals("Not a success", "Y", result);
+        Assert.assertEquals("Not a success", "PROCEED", result.getR().get("status"));
     }
 }
