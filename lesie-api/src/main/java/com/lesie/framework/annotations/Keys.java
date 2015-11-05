@@ -14,12 +14,12 @@
  *      limitations under the License.
  */
 
-package org.lesie.loader;
+package com.lesie.framework.annotations;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
-public interface LesieLoader{
-    public void addGateClass(String classFullName,Class gateClass);
-    public void addMarkClass(String classFullName,Class markClass);
-    public void setFrameworkStarted(Boolean frameworkStarted);
-    public boolean isFrameworkStarted();
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Keys {
+    String value();
 }

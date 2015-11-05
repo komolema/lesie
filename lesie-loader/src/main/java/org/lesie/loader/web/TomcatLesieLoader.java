@@ -17,7 +17,6 @@
 package org.lesie.loader.web;
 
 import org.lesie.attacher.DefaultAttacher;
-import org.lesie.loader.LesieLoader;
 import org.apache.catalina.loader.WebappClassLoader;
 import org.lesie.loader.impl.DefaultLesieLoaderStrategy;
 
@@ -25,38 +24,24 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
-public class TomcatLesieLoader extends WebappClassLoader implements LesieLoader {
+public class TomcatLesieLoader extends WebappClassLoader {
 
-    private boolean frameworkStarted = false;
-    private DefaultLesieLoaderStrategy loaderStrategy;
     private DefaultAttacher da;
 
     private Logger log = Logger.getLogger(TomcatLesieLoader.class.getName());
 
     public TomcatLesieLoader() {
         super();
-        lInit();
-
+        da = new DefaultAttacher();
     }
 
     public TomcatLesieLoader(ClassLoader parent) {
         super(parent);
-        lInit();
-    }
-
-    /* name: init
-     * description: this does the necessary initialisation for the Tomcat lesie loader
-     *
-     */
-    private void lInit() {
-        loaderStrategy = new DefaultLesieLoaderStrategy();
         da = new DefaultAttacher();
     }
 
     @Override
     public Class loadClass(String name) throws ClassNotFoundException {
-        log.info("lesie framework has been started");
-
         try {
             da.weaveCodeToClass(name,this);
         } catch (Exception e) {
@@ -73,24 +58,5 @@ public class TomcatLesieLoader extends WebappClassLoader implements LesieLoader 
     @Override
     protected Class findLoadedClass0(String name) {
         return super.findLoadedClass0(name);    //To change body of overridden methods use File | Settings | File Templates.
-    }
-
-    public boolean isFrameworkStarted() {
-        return frameworkStarted;
-    }
-
-    public void setFrameworkStarted(Boolean frameWorkStarted) {
-        this.frameworkStarted = frameWorkStarted;
-    }
-
-    @Override
-    public void addGateClass(String classFullName, Class gateClass) {
-        loaderStrategy.addGateClass(classFullName, gateClass);
-
-    }
-
-    @Override
-    public void addMarkClass(String classFullName, Class markClass) {
-        loaderStrategy.addGateClass(classFullName, markClass);
     }
 }

@@ -16,6 +16,7 @@
 
 package org.lesie.example.servlet;
 
+import org.lesie.example.ShareService;
 import org.lesie.example.domain.Example;
 
 import java.io.IOException;
@@ -25,9 +26,9 @@ public class ExampleServlet extends javax.servlet.http.HttpServlet {
 
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         Example example = new Example();
+        ShareService shareService = new ShareService();
 
-        example.setId("123");
-
+        shareService.shareData("1", "2", "3", "extra");
 
     }
 }

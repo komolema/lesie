@@ -17,10 +17,13 @@
 package com.lesie.framework.service;
 
 
+import com.lesie.framework.request.SharingRequest;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+
+import java.util.HashMap;
 
 @Ignore
 public class PrivacyEngineServiceTest {
@@ -34,7 +37,15 @@ public class PrivacyEngineServiceTest {
 
     @Test
     public void testCanShare(){
-        String result = privacyEngineService.canShare("1", "2", "3");
+
+        SharingRequest request = new SharingRequest("e123", "ck1", "w123", "ct1",
+                new HashMap<String, String>());
+        String result = null;
+        try {
+            result = privacyEngineService.canShare(request);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         Assert.assertEquals("Not a success", "Y", result);
     }
 }

@@ -19,14 +19,14 @@ package com.lesie.framework;
 
 import com.lesie.framework.annotations.ExitPoint;
 import com.lesie.framework.annotations.Gate;
-import com.lesie.framework.annotations.Key;
+import com.lesie.framework.annotations.Keys;
 
 @Gate
 public class ShareService {
 
     @ExitPoint
-    public void shareData(@Key("thirdParty") String thirdPartyKey,
-                          @Key("holder") String holderKey,
+    public void shareData(@Keys("thirdParty") String thirdPartyKey,
+                          @Keys("holder") String holderKey,
                           Example example) {
 
     }

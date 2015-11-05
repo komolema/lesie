@@ -14,12 +14,21 @@
  *      limitations under the License.
  */
 
-package com.lesie.framework.annotations;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+package org.lesie.example;
 
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Key {
-    String value();
+import com.lesie.framework.annotations.ExitPoint;
+import com.lesie.framework.annotations.Gate;
+import com.lesie.framework.annotations.Keys;
+
+@Gate
+public class ShareService {
+
+    @ExitPoint
+    public void shareData(@Keys("thirdParty") String thirdPartyKey,
+                          @Keys("holder") String holderKey,
+                          @Keys("owner") String ownerKey, String otherStuff) {
+
+
+    }
 }

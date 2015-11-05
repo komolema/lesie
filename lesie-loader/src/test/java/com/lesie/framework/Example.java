@@ -16,13 +16,13 @@
 
 package com.lesie.framework;
 
-import com.lesie.framework.annotations.Key;
+import com.lesie.framework.annotations.Keys;
 import com.lesie.framework.annotations.Marked;
 
 
 @Marked
 public class Example {
-    @Key("owner")
+    @Keys("owner")
     private String id;
 
     public String getId() {
