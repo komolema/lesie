@@ -19,4 +19,10 @@ package com.lesie.framework.exception;
 
 public class SharingException extends Exception{
 
+    public SharingException(String message){
+        super(message);
+    }
+
+    public SharingException(){}
+
 }

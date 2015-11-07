@@ -16,9 +16,8 @@
 
 package org.lesie.loader.web;
 
-import org.lesie.attacher.DefaultAttacher;
 import org.apache.catalina.loader.WebappClassLoader;
-import org.lesie.loader.impl.DefaultLesieLoaderStrategy;
+import org.lesie.attacher.DefaultAttacher;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -43,7 +42,10 @@ public class TomcatLesieLoader extends WebappClassLoader {
     @Override
     public Class loadClass(String name) throws ClassNotFoundException {
         try {
-            da.weaveCodeToClass(name,this);
+            boolean weaved = da.weaveCodeToClass(name,this);
+           if(weaved) {
+               resourceEntries.remove(name.replaceAll("\\.", "/") + ".class");
+           }
         } catch (Exception e) {
             log.log(Level.ALL,e.getMessage());
         }

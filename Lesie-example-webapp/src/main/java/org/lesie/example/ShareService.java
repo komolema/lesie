@@ -19,16 +19,17 @@ package org.lesie.example;
 
 import com.lesie.framework.annotations.ExitPoint;
 import com.lesie.framework.annotations.Gate;
-import com.lesie.framework.annotations.Keys;
+import com.lesie.framework.request.SharingRequest;
 
 @Gate
 public class ShareService {
 
     @ExitPoint
-    public void shareData(@Keys("thirdParty") String thirdPartyKey,
-                          @Keys("holder") String holderKey,
-                          @Keys("owner") String ownerKey, String otherStuff) {
+    public void shareData(SharingRequest sharingRequest, String otherStuff) {
+        doSomething();
+    }
 
-
+    private void doSomething(){
+        System.out.println("doSomething");
     }
 }

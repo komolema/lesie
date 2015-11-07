@@ -16,8 +16,8 @@
 
 package org.lesie.example.servlet;
 
+import com.lesie.framework.request.SharingRequest;
 import org.lesie.example.ShareService;
-import org.lesie.example.domain.Example;
 
 import java.io.IOException;
 
@@ -25,10 +25,10 @@ import java.io.IOException;
 public class ExampleServlet extends javax.servlet.http.HttpServlet {
 
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
-        Example example = new Example();
+        SharingRequest sharingRequest = new SharingRequest("w123", "ck1", "e123", "ct1", null);
         ShareService shareService = new ShareService();
 
-        shareService.shareData("1", "2", "3", "extra");
+        shareService.shareData(sharingRequest, "extra");
 
     }
 }
